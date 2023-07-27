@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Express assignment</title>
+</head>
+
+<body>
+    <h1>Root route</h1>
+    <p>type /yourname in url to see queryparms and path</p>
+    <p>Type valid json in the input box below and submit to get back an array form of your input</p>
+
+    <form>
+        <input type="text" id="jsonInput" name="names" required>
+    </form>
+    <button type="submit" id="submit">submit Json</button>
+    <!-- <p id="result">
+    </p> -->
+    <script>
+        const btn = document.querySelector('#submit');
+        btn.addEventListener('click', async (e) => {
+            const inputData = document.querySelector("#jsonInput").value;
+            try {
+                JSON.parse(inputData);
+            } catch (err) {
+                alert('invalid json input');
+                return
+            }
+            e.preventDefault();
+            if (inputData !== '') {
+                await fetch('/converttoarray', {
+                    method: 'post',
+                    body: JSON.stringify({
+                        input: inputData
+                    }),
+                    headers: {
+                        "Content-Type": "application/json",
+                    }
+                })
+                    .then(res => res.json())
+                    .then(data => {
+                        console.log(data)
+                        // const parent = document.querySelector("#result");
+                        // parent.innerText = data
+                    })
+                    .catch(err => {
+                        console.log("failed to complete", err)
+                        alert('failed to complete');
+                    })
+            }
+        })
+
+    </script>
+
+</body>
+
+</html>
